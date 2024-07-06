@@ -92,6 +92,160 @@
 
 <?php
 
-    echo "<br><br><br>test";
+    echo "<br><br><br>Q8<br><br>";
+    $example8 = "That new trainee is such a genius";
+    $outPut8 = str_replace("That", "Our", $example8);
+    echo "Example input : " . $example8 . "<br>";
+    echo "Example output : " . $outPut8;
 
 ?>
+
+<?php
+
+    echo "<br><br><br>Q9<br><br>";
+    $example9A = "dragonball";
+    $example9B = "dragonboll";
+
+    $example9ALength = strlen($example9A);
+    $example9BLength = strlen($example9B);
+
+    $aCharacter = null;
+    $bCharacter = null;
+    $index9 = 0;
+
+
+    $minLength = min($example9ALength, $example9BLength);
+
+    for ($i = 0; $i < $minLength; $i++) {
+        if ($example9A[$i] !== $example9B[$i]) {
+            $aCharacter = $example9A[$i];
+            $bCharacter = $example9B[$i];
+            $index9 = $i;
+            break;
+        }
+    }
+
+    echo "String 1: " . $example9A . "<br>";
+    echo "String 2: " . $example9B . "<br>";
+    echo "Expected result: First difference between two strings at position " . $index9 . ": " . "\"$aCharacter\"" . " vs " . "\"$bCharacter\"";
+
+?>
+
+<?php
+
+    echo "<br><br><br>Q10<br><br>";
+    $example10 = "Twinkle, twinkle, little star";
+    $arrayExample = explode(",", $example10);
+
+    echo "Example input : " . $example10 . "<br>" ; 
+    echo "Example output : ";
+    var_dump($arrayExample)
+?>
+
+<?php
+
+    echo "<br><br><br>Q11<br><br>";
+    
+    $example11A = "s";
+    $example11B = "z";
+
+
+    function nextLetter($input) {
+        $input = strtolower($input);
+        $lettersList = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+        for ($i = 0 ; $i <= sizeof($lettersList) ; $i++) {
+            if ($input == "z") {
+                return $lettersList[0] ;
+            }
+            elseif ($lettersList[$i] == $input) {
+                return $lettersList[$i + 1] ;
+            }
+        }
+        return "Please Enter A single alphabetic letter";
+    }
+
+    echo "Example input : \"s\" <br> ";
+    echo "Example output : " . nextLetter($example11A) . "<br>";
+    echo "Example input : \"z\" <br> ";
+    echo "Example output : " . nextLetter($example11B) . "<br>";
+    
+?>
+
+
+<?php
+
+    echo "<br><br><br>Q12<br><br>";
+
+    $example12 = "The brown fox";
+    $exWord1 = "The";
+    $exWord2 = "brown";
+    $chosenWord = "quick";
+
+
+    function insertingAText($word1, $word2, $sentence, $insertedWord) {
+
+        if (strpos($sentence, $word1) !== false && strpos($sentence, $word2) !== false) {
+
+            $arraySentence = explode(" ", $sentence);
+            $index1 = array_search($word1, $arraySentence);
+            $index2 = array_search($word2, $arraySentence);
+
+            if ($index1 < $index2) {
+                $arraySentence = array_merge(
+                    array_slice($arraySentence, 0, $index2),
+                    [$insertedWord],
+                    array_slice($arraySentence, $index2)
+                );
+                $updatedSentence = implode(" ", $arraySentence);
+                return $updatedSentence;
+            } else {
+                return "Error, '$word1' does not appear before '$word2' .";
+            }
+        } else {
+            return "Please choose correct words that's from the sentence";
+        }
+    }
+
+
+    echo "Current sentence : " . $example12 . "<br>";
+    echo "You want to insert \"quick\" between \"The\" and \"brown\" ." . "<br>";
+    echo "Expected output : ";
+    echo insertingAText($exWord1, $exWord2, $example12, $chosenWord);
+
+?>
+
+<?php
+
+    echo "<br><br><br>Q13<br><br>";
+
+    $example13 = "00000054841";
+
+    function removeInitialZeroes($string) {
+        $numberArray = str_split($string);
+        $index13 = 0;
+        while ($index13 < count($numberArray) && $numberArray[$index13] === '0') {
+            $index13++;
+        };
+        $slicedArray =  array_slice($numberArray, $index13);
+        $resultString = implode('', $slicedArray);
+        return $resultString;
+    }
+
+    echo "This is the example : " . $example13 . "<br>";
+    echo "This is the output : ";
+    echo removeInitialZeroes($example13);
+?>
+
+<?php 
+
+    echo "<br><br><br>Q14<br><br>";
+
+    
+?>
+
+
+
+
+
+
+
