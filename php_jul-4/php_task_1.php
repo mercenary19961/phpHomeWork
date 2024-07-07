@@ -236,11 +236,34 @@
     echo removeInitialZeroes($example13);
 ?>
 
-<?php 
+?>
+
+
+<?php
 
     echo "<br><br><br>Q14<br><br>";
 
-    
+    $example14 = "The quick brown fox jumps over the lazy dog";
+    $chosenWord14 = "quick";
+
+
+    function removingAText($sentence, $chosenWord) {
+
+        if (strpos($sentence, $chosenWord) !== false) {
+
+            $updatedSentence14 = str_replace($chosenWord, "", $sentence);
+            return $updatedSentence14;
+        } else {
+            return "Please choose correct words that's from the sentence";
+        }
+    }
+
+
+    echo "Current sentence : " . $example14 . "<br>";
+    echo "You want to remove \"quick\"" . "<br>";
+    echo "Expected output : ";
+    echo removingAText($example14, $chosenWord14);
+
 ?>
 
 
