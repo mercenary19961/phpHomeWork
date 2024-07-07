@@ -266,7 +266,68 @@
 
 ?>
 
+<?php 
 
+    echo "Q15<br><br>"; 
+
+    $exampleString15 = "The quick brown fox jumps - over the lazy dog---";
+
+    $updatedString15 = str_replace("-", "", $exampleString15);
+
+    echo "Original string: " . $exampleString15 . "<br>";
+    echo "Updated string: " . $updatedString15 . "<br>";
+?>
+
+<?php 
+
+    echo "<br><br><br>Q16<br><br>"; 
+
+    $exampleString16 = '\"\1+2/3*2:2-3/4*3';
+
+    $updatedString16 = preg_replace('/[^a-zA-Z0-9\s]/', ' ', $exampleString16);
+
+    echo "Original string: " . $exampleString16 . "<br>";
+    echo "Updated string: " . $updatedString16 . "<br>";
+?>
+
+<?php 
+
+    echo "<br><br><br>Q17<br><br>"; 
+
+    $exampleString17 = "The quick brown fox jumps over the lazy dog";
+
+    $arrayExample17 =   explode(" ", $exampleString17);
+
+    $chosenWords17 = array_slice($arrayExample17, 0, 5);
+
+    $updatedString17 = implode(" ", $chosenWords17);
+
+    echo "Original string: " . $exampleString17 . "<br>";
+    echo "Updated string: " . $updatedString17 . "<br>";
+?>
+
+<?php
+
+    echo "<br><br><br>Q18<br><br>"; 
+
+    $exampleString18 = "2,543.12";
+
+    $updatedString18 = str_replace(",", "", $exampleString18);
+
+    echo "Original string: " . $exampleString18 . "<br>";
+    echo "Updated string: " . $updatedString18 . "<br>";
+?>
+
+<?php
+
+    echo "<br><br><br>Q19<br><br>"; 
+
+    $example19 = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z";
+
+    $updatedString19 = str_replace(",", " ", $example19);
+
+    echo "Updated string: " . $updatedString19 . "<br>";
+?>
 
 
 
