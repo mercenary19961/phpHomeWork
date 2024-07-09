@@ -139,7 +139,7 @@
 
     echo "Example input : " . $example10 . "<br>" ; 
     echo "Example output : ";
-    var_dump($arrayExample)
+    var_dump($arrayExample);
 ?>
 
 <?php
@@ -328,6 +328,8 @@
 
     echo "Updated string: " . $updatedString19 . "<br>";
 ?>
+
+
 
 
 
