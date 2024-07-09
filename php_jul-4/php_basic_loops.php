@@ -194,31 +194,30 @@
     echo "<br><br><br>Q12<br><br>";     
     
 
-    $letters = range('A', 'E'); // Create an array with letters from A to E
-    $maxRows = 5; // Maximum number of rows in the upper part of the pattern
+    $letters = range('A', 'E'); 
+    $maxRows = 5; 
 
     echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;A <br>";
     for ($i = 2; $i <= $maxRows; $i++) {
-        // Print leading spaces
+
         for ($j = $maxRows - $i; $j > 0; $j--) {
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;"; // More space between characters
+            echo "&nbsp;&nbsp;&nbsp;&nbsp;"; 
         }
-        // Print letters
+
         for ($j = 0; $j < $i; $j++) {
-            echo $letters[$j] . "&nbsp;&nbsp;&nbsp;&nbsp;"; // More space between characters
+            echo $letters[$j] . "&nbsp;&nbsp;&nbsp;&nbsp;"; 
         }
         echo "<br>";
     }
 
-    // Print the lower part of the pattern
     for ($i = $maxRows - 1; $i > 1; $i--) {
-        // Print leading spaces
+        
         for ($j = $maxRows - $i; $j > 0; $j--) {
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;"; // More space between characters
+            echo "&nbsp;&nbsp;&nbsp;&nbsp;"; 
         }
-        // Print letters
+        
         for ($j = 0; $j < $i; $j++) {
-            echo $letters[$j] . "&nbsp;&nbsp;&nbsp;&nbsp;"; // More space between characters
+            echo $letters[$j] . "&nbsp;&nbsp;&nbsp;&nbsp;"; 
         }
         echo "<br>";
     }

@@ -155,10 +155,9 @@
 
     echo "<br><br><br>Q8<br><br>";
 
-    $example8 = 150;
+    $example8 = 250;
 
     function calculateUsage($usage) {
-        $remaining = 0;
         $total = 0;
         if ($usage <= 0) {
             return "Please Enter Valid Number";

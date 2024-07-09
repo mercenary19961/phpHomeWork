@@ -1,7 +1,7 @@
 <?php
     echo "Q1<br><br>";
 
-    $example = 7;
+    $example = 53;
 
     if (($example >= 1)) {
         for ($i = 2; $i < $example ; $i++) {
@@ -95,14 +95,14 @@
 <?php
 
     echo "<br><br><br>Q6<br><br>";
-    $example = 407;
+    $example = 8208;
     echo "Example input : " . $example . "<br>";
 
     function isArmstrongNumber($number) {
         $total = 0;
         $numArray = str_split($number);
         for ($i = 0; $i < count($numArray); $i++) {
-            $cubicNum = (int)$numArray[$i] ** 3 ;
+            $cubicNum = (int)$numArray[$i] ** count($numArray) ;
             $total += $cubicNum; 
         }
         if ($total == $number) {
@@ -139,7 +139,7 @@
 
 <?php
 
-    echo "<br><br><br>Q7<br><br>";
+    echo "<br><br><br>Q8<br><br>";
 
     $example = [1, 2, 5, 4, 4, 8];
     $hashMap = [];
@@ -148,7 +148,7 @@
             $hashMap[] = $example[$i];
         }
     }
-    echo "[" . implode(", ", $hashMap) . "]" ;
+    echo "$"."array1 = ". "(" . implode(", ", $hashMap) . ");" ;
 
 
 ?>
