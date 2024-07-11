@@ -15,5 +15,5 @@
             <a href="todo.php">To-Do List</a>
             <a href="cookies.php">Manage Cookies</a>
         </nav>
-        <p>Page requested at: <?php echo date('Y-m-d H:i:s'); ?></p>
+        <p>Page requested at: <?php echo date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']); ?></p>
     </header>

@@ -4,7 +4,7 @@
     <h2>Project Information</h2>
     <div class="info-box">
         <?php
-            echo 'Project Name: Super Variables<br>';
+            echo 'Project Name: Super Variables <br>';
             echo 'Script Name: ' . basename($_SERVER['SCRIPT_NAME']) . '<br>';
         ?>
     </div>
@@ -12,9 +12,7 @@
     <h2>Page Refresh Counter</h2>
     <div class="info-box">
         <?php
-            session_start([
-                'cookie_lifetime' => 0,
-            ]);
+            session_start();
             if (!isset($_SESSION['counter'])) {
                 $_SESSION['counter'] = 0;
             }
@@ -26,16 +24,15 @@
     <h2>Number of Visitors</h2>
     <div class="info-box">
         <?php
-            $visitor_count_file = 'visitors.txt';
-            if (!file_exists($visitor_count_file)) {
-                file_put_contents($visitor_count_file, '0');
+            if (!isset($_COOKIE['visitor'])) {
+                $_SESSION['visitor_counter'] = 1;
+                setcookie('visitor', '1', time() + (1));
+            } else {
+                
+                $_SESSION['visitor_counter']++;
             }
 
-            $visitor_count = file_get_contents($visitor_count_file);
-            $visitor_count++;
-            file_put_contents($visitor_count_file, $visitor_count);
-
-            echo 'Number of visitors: ' . $visitor_count . '<br>';
+            echo 'Number of unique visitors: ' . $_SESSION['visitor_counter'] . '<br>';
         ?>
     </div>
 

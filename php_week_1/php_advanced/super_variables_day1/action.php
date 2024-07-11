@@ -6,7 +6,8 @@
             $email = $_POST['email'];
             $password = $_POST['password'];
             echo "<div class='info-box'>Data sent by POST method.<br>Email: $email<br>Password: $password<br></div>";
-        } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['email']) && isset($_GET['password'])) {
+        } 
+        elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['email']) && isset($_GET['password'])) {
             $email = $_GET['email'];
             $password = $_GET['password'];
             echo "<div class='info-box'>Data sent by GET method.<br>Email: $email<br>Password: $password<br></div>";
