@@ -9,7 +9,7 @@
 <body>
     <div class="container my-5">
         <h2>Employees Details</h2>
-        <a class="btn btn-primary" href="create.php" role="button">New Client</a>
+        <a class="btn btn-primary" href="create.php" role="button">New employee</a>
         <br>
         <table class="table">
             <thead>
@@ -42,7 +42,8 @@
                     }
 
                     // Read all rows from database table
-                    $sql = "SELECT * FROM employees";
+                    $id = $_GET["id"];
+                    $sql = "SELECT * FROM employees WHERE id = $id";
                     $result = $connection->query($sql);
 
                     if (!$result) {
