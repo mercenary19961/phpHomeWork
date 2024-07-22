@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Check input errors before inserting into database
+    // Check input errors before inserting into database   
     if (empty($name_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
         $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
 
@@ -77,23 +77,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='alert alert-success'>$success_msg</div>";
         }
         ?>
+        <!-- <form action="register.php" method="post">   ** We use an (echo) inside the action form to make it dynamic, so if we change the name of the php file it will still catch the current name of the file--> 
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <label>Name</label>
                 <input type="text" name="name" class="form-control" value="<?php echo $name; ?>">
                 <span class="text-danger"><?php echo $name_err; ?></span>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <label>Email</label>
                 <input type="email" name="email" class="form-control" value="<?php echo $email; ?>">
                 <span class="text-danger"><?php echo $email_err; ?></span>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
                 <span class="text-danger"><?php echo $password_err; ?></span>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <label>Confirm Password</label>
                 <input type="password" name="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
                 <span class="text-danger"><?php echo $confirm_password_err; ?></span>
@@ -103,6 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="login.php" class="btn btn-secondary">Login</a>
             </div>
         </form>
+        
     </div>
 </body>
 </html>

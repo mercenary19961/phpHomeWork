@@ -73,17 +73,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         ?>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <label>Email</label>
                 <input type="email" name="email" class="form-control" value="<?php echo $email; ?>">
                 <span class="text-danger"><?php echo $email_err; ?></span>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
                 <span class="text-danger"><?php echo $password_err; ?></span>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <input type="submit" class="btn btn-primary" value="Login">
                 <a href="register.php" class="btn btn-secondary">Register</a>
             </div>
