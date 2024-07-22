@@ -1,16 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "user_management";
-
-// Create connection
-$connection = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
-}
+require 'config.php';
 
 $email = $password = "";
 $email_err = $password_err = $login_err = "";
@@ -34,44 +23,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check input errors before checking in database
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT id, name, email, password FROM users WHERE email = ?";
+        $sql = "SELECT id, name, email, password FROM users WHERE email = :email";
 
-        if ($stmt = $connection->prepare($sql)) {
-            $stmt->bind_param("s", $param_email);
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([':email' => $email]);
 
-            $param_email = $email;
+            if ($stmt->rowCount() == 1) {
+                $row = $stmt->fetch();
+                $id = $row['id'];
+                $name = $row['name'];
+                $hashed_password = $row['password'];
+                if (password_verify($password, $hashed_password)) {
+                    // Password is correct, start a new session and save the user's details
+                    session_start();
+                    $_SESSION["loggedin"] = true;
+                    $_SESSION["id"] = $id;
+                    $_SESSION["name"] = $name;
+                    $_SESSION["email"] = $email;
 
-            if ($stmt->execute()) {
-                $stmt->store_result();
-
-                if ($stmt->num_rows == 1) {
-                    $stmt->bind_result($id, $name, $email, $hashed_password);
-                    if ($stmt->fetch()) {
-                        if (password_verify($password, $hashed_password)) {
-                            // Password is correct, start a new session and save the user's details
-                            session_start();
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["name"] = $name;
-                            $_SESSION["email"] = $email;
-
-                            header("location: welcome.php");
-                        } else {
-                            $login_err = "Invalid email or password.";
-                        }
-                    }
+                    header("location: welcome.php");
                 } else {
                     $login_err = "Invalid email or password.";
                 }
             } else {
-                echo "Something went wrong. Please try again later.";
+                $login_err = "Invalid email or password.";
             }
-
-            $stmt->close();
+        } catch (PDOException $e) {
+            echo "Something went wrong. Please try again later.";
         }
     }
-
-    $connection->close();
 }
 ?>
 
@@ -104,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="mb-3">
                 <input type="submit" class="btn btn-primary" value="Login">
-                <a href="register.php" class="btn btn-secondary">Register Page</a>
+                <a href="register.php" class="btn btn-secondary">Register</a>
             </div>
         </form>
     </div>

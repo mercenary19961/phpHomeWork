@@ -1,16 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "user_management";
-
-// Create connection
-$connection = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
-}
+require 'config.php';
 
 $name = $email = $password = $confirm_password = "";
 $name_err = $email_err = $password_err = $confirm_password_err = $success_msg = "";
@@ -53,28 +42,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check input errors before inserting into database
     if (empty($name_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
-        $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
 
-        if ($stmt = $connection->prepare($sql)) {
-            $stmt->bind_param("sss", $param_name, $param_email, $param_password);
-
-            $param_name = $name;
-            $param_email = $email;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-
-            if ($stmt->execute()) {
-                // Redirect to login page after successful registration
-                header("location: login.php");
-                exit;
-            } else {
-                echo "Something went wrong. Please try again later.";
-            }
-
-            $stmt->close();
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':name' => $name,
+                ':email' => $email,
+                ':password' => password_hash($password, PASSWORD_DEFAULT)
+            ]);
+            // Redirect to login page after successful registration
+            header("location: login.php");
+            exit;
+        } catch (PDOException $e) {
+            echo "Something went wrong: " . $e->getMessage();
         }
     }
-
-    $connection->close();
 }
 ?>
 
@@ -117,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="mb-3">
                 <input type="submit" class="btn btn-primary" value="Register">
-                <a href="login.php" class="btn btn-secondary">Login Page</a>
+                <a href="login.php" class="btn btn-secondary">Login</a>
             </div>
         </form>
     </div>
