@@ -1,4 +1,3 @@
-<!-- welcome.php -->
 <?php
 session_start();
 if (!isset($_SESSION['email'])) {
@@ -46,7 +45,7 @@ $pdo = null;
     <div class="container">
         <h2>Welcome, <?php echo htmlspecialchars($user['first_name']); ?>!</h2>
         <?php if ($user['user_image']) { ?>
-            <img src="data:image/jpeg;base64,<?php echo base64_encode($user['user_image']); ?>" alt="User Image" class="user-image">
+            <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="User Image" class="user-image">
         <?php } ?>
         <p>Your email: <?php echo htmlspecialchars($_SESSION['email']); ?></p>
         <a href="logout.php" class="btn btn-primary">Logout</a>

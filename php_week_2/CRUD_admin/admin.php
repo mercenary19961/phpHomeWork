@@ -1,4 +1,3 @@
-<!-- admin.php -->
 <?php
 session_start();
 if (!isset($_SESSION['email']) || $_SESSION['roleid'] != 1) {
@@ -27,13 +26,6 @@ $pdo = null;
         .btn-custom {
             margin: 10px 0;
         }
-        .btn-group-vertical {
-            display: flex;
-            flex-direction: column;
-        }
-        .btn-group-vertical .btn {
-            margin-bottom: 5px;
-        }
         table tbody td {
             vertical-align: middle;
         }
@@ -43,6 +35,9 @@ $pdo = null;
             margin-right: auto;
             width: 50px;
             height: 50px;
+        }
+        .btn-group-horizontal .btn {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -72,7 +67,7 @@ $pdo = null;
                         <td><?php echo htmlspecialchars($user['id']); ?></td>
                         <td>
                             <?php if ($user['user_image']) { ?>
-                                <img src="data:image/jpeg;base64,<?php echo base64_encode($user['user_image']); ?>" alt="User Image" class="user-image">
+                                <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="User Image" class="user-image">
                             <?php } ?>
                         </td>
                         <td><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name'] . ' ' . $user['family_name']); ?></td>
@@ -81,7 +76,7 @@ $pdo = null;
                         <td><?php echo htmlspecialchars($user['phone_number']); ?></td>
                         <td><?php echo htmlspecialchars($user['roleid'] == 1 ? 'admin' : 'user'); ?></td>
                         <td>
-                            <div class="btn-group" role="group">
+                            <div class="btn-group btn-group-horizontal" role="group">
                                 <a href="view_user.php?id=<?php echo htmlspecialchars($user['id']); ?>" class="btn btn-info">View</a>
                                 <a href="edit_user.php?id=<?php echo htmlspecialchars($user['id']); ?>" class="btn btn-warning">Edit</a>
                                 <a href="delete_user.php?id=<?php echo htmlspecialchars($user['id']); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>

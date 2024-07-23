@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmPassword = $_POST['confirmPassword'];
 
     if (!validateName($firstName)) {
-        $errors['firstName'] = 'First name must be at least 2 characters long and contain no numbers.';
+        $errors['firstName'] = 'First name must be at least  characters long and contain no numbers.';
     }
     if (!validateName($middleName)) {
         $errors['middleName'] = 'Middle name must be at least 2 characters long and contain no numbers.';
@@ -52,30 +52,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($errors)) {
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-        // Read image file content
-        $imageData = file_get_contents($_FILES["userImage"]["tmp_name"]);
+        // Path to save the uploaded image
+        $targetDir = "uploads/";
+        $targetFile = $targetDir . basename($_FILES["userImage"]["name"]);
+        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-        try {
-            $sql = "INSERT INTO users (first_name, middle_name, last_name, family_name, email, phone_number, user_image, password, roleid) 
-                    VALUES (:firstName, :middleName, :lastName, :familyName, :email, :phoneNumber, :userImage, :password, 2)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ':firstName' => $firstName,
-                ':middleName' => $middleName,
-                ':lastName' => $lastName,
-                ':familyName' => $familyName,
-                ':email' => $email,
-                ':phoneNumber' => $phoneNumber,
-                ':userImage' => $imageData,
-                ':password' => $passwordHash
-            ]);
+        // Check if the file is an actual image
+        $check = getimagesize($_FILES["userImage"]["tmp_name"]);
+        if ($check !== false) {
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($_FILES["userImage"]["tmp_name"], $targetFile)) {
+                try {
+                    $sql = "INSERT INTO users (first_name, middle_name, last_name, family_name, email, phone_number, user_image, password, roleid) 
+                            VALUES (:firstName, :middleName, :lastName, :familyName, :email, :phoneNumber, :userImage, :password, 2)";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute([
+                        ':firstName' => $firstName,
+                        ':middleName' => $middleName,
+                        ':lastName' => $lastName,
+                        ':familyName' => $familyName,
+                        ':email' => $email,
+                        ':phoneNumber' => $phoneNumber,
+                        ':userImage' => $targetFile,
+                        ':password' => $passwordHash
+                    ]);
 
-            $_SESSION['email'] = $email;
-            header("Location: login.php");
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
+                    $_SESSION['email'] = $email;
+                    header("Location: login.php");
+                } catch(PDOException $e) {
+                    echo "Error: " . $e->getMessage();
+                }
+            } else {
+                $errors['userImage'] = 'Sorry, there was an error uploading your file.';
+            }
+        } else {
+            $errors['userImage'] = 'File is not an image.';
         }
-    } else {
+    }
+
+    if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
         header("Location: signup.php");
     }

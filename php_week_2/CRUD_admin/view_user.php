@@ -1,4 +1,3 @@
-<!-- view_user.php -->
 <?php
 session_start();
 if (!isset($_SESSION['email'])) {
@@ -51,7 +50,7 @@ $pdo = null;
     <div class="container">
         <h2><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name'] . ' ' . $user['family_name']); ?></h2>
         <?php if ($user['user_image']) { ?>
-            <img src="data:image/jpeg;base64,<?php echo base64_encode($user['user_image']); ?>" alt="User Image" class="user-image">
+            <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="User Image" class="user-image">
         <?php } ?>
         <p>Email: <?php echo htmlspecialchars($user['email']); ?></p>
         <p>Phone Number: <?php echo htmlspecialchars($user['phone_number']); ?></p>
