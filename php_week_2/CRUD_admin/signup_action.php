@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmPassword = $_POST['confirmPassword'];
 
     if (!validateName($firstName)) {
-        $errors['firstName'] = 'First name must be at least  characters long and contain no numbers.';
+        $errors['firstName'] = 'First name must be at least 2 characters long and contain no numbers.';
     }
     if (!validateName($middleName)) {
         $errors['middleName'] = 'Middle name must be at least 2 characters long and contain no numbers.';
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $check = getimagesize($_FILES["userImage"]["tmp_name"]);
         if ($check !== false) {
             // Move the uploaded file to the target directory
-            if (move_uploaded_file($_FILES["userImage"]["tmp_name"], $targetFile)) {
+            if (move_uploaded_file($_FILES["userImage"]["tmp_name"], $targetFile)) { 
                 try {
                     $sql = "INSERT INTO users (first_name, middle_name, last_name, family_name, email, phone_number, user_image, password, roleid) 
                             VALUES (:firstName, :middleName, :lastName, :familyName, :email, :phoneNumber, :userImage, :password, 2)";
