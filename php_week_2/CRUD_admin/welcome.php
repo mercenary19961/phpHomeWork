@@ -1,3 +1,4 @@
+<!-- welcome.php -->
 <?php
 session_start();
 if (!isset($_SESSION['email'])) {
@@ -7,7 +8,7 @@ if (!isset($_SESSION['email'])) {
 include 'config.php';
 
 try {
-    $sql = "SELECT first_name, email, user_image FROM users WHERE email = :email";
+    $sql = "SELECT first_name, user_image FROM users WHERE email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':email' => $_SESSION['email']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -31,21 +32,23 @@ $pdo = null;
             flex-direction: column;
             text-align: center;
         }
-        .profile-img {
+        .user-image {
+            display: block;
+            margin: 20px auto;
             width: 100px;
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="Profile Image" class="profile-img">
         <h2>Welcome, <?php echo htmlspecialchars($user['first_name']); ?>!</h2>
-        <p>Your email: <?php echo htmlspecialchars($user['email']); ?></p>
-        <p>Welcome to the website!</p>
+        <?php if ($user['user_image']) { ?>
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($user['user_image']); ?>" alt="User Image" class="user-image">
+        <?php } ?>
+        <p>Your email: <?php echo htmlspecialchars($_SESSION['email']); ?></p>
         <a href="logout.php" class="btn btn-primary">Logout</a>
     </div>
 </body>

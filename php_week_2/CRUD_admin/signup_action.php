@@ -51,42 +51,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($errors)) {
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $targetDir = "uploads/";
-        $targetFile = $targetDir . basename($_FILES["userImage"]["name"]);
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-        $check = getimagesize($_FILES["userImage"]["tmp_name"]);
-        if ($check !== false) {
-            if (move_uploaded_file($_FILES["userImage"]["tmp_name"], $targetFile)) {
-                try {
-                    $sql = "INSERT INTO users (first_name, middle_name, last_name, family_name, email, phone_number, user_image, password, roleid) 
-                            VALUES (:firstName, :middleName, :lastName, :familyName, :email, :phoneNumber, :userImage, :password, 2)";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute([
-                        ':firstName' => $firstName,
-                        ':middleName' => $middleName,
-                        ':lastName' => $lastName,
-                        ':familyName' => $familyName,
-                        ':email' => $email,
-                        ':phoneNumber' => $phoneNumber,
-                        ':userImage' => $targetFile,
-                        ':password' => $passwordHash
-                    ]);
+        // Read image file content
+        $imageData = file_get_contents($_FILES["userImage"]["tmp_name"]);
 
-                    $_SESSION['email'] = $email;
-                    header("Location: login.php");
-                } catch(PDOException $e) {
-                    echo "Error: " . $e->getMessage();
-                }
-            } else {
-                $errors['userImage'] = 'Sorry, there was an error uploading your file.';
-            }
-        } else {
-            $errors['userImage'] = 'File is not an image.';
+        try {
+            $sql = "INSERT INTO users (first_name, middle_name, last_name, family_name, email, phone_number, user_image, password, roleid) 
+                    VALUES (:firstName, :middleName, :lastName, :familyName, :email, :phoneNumber, :userImage, :password, 2)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':firstName' => $firstName,
+                ':middleName' => $middleName,
+                ':lastName' => $lastName,
+                ':familyName' => $familyName,
+                ':email' => $email,
+                ':phoneNumber' => $phoneNumber,
+                ':userImage' => $imageData,
+                ':password' => $passwordHash
+            ]);
+
+            $_SESSION['email'] = $email;
+            header("Location: login.php");
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
-    }
-
-    if (!empty($errors)) {
+    } else {
         $_SESSION['errors'] = $errors;
         header("Location: signup.php");
     }
