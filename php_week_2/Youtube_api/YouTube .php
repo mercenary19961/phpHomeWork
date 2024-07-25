@@ -13,20 +13,6 @@
             <input type="text" name="query" placeholder="Search YouTube" required>
             <button type="submit">Search</button>
         </form>
-        <?php if (isset($results) && !empty($results)): ?>
-            <div id="result-count">
-                Total Results: <?php echo $totalResults; ?>
-            </div>
-            <div id="results">
-                <?php foreach ($results as $item): ?>
-                    <div class="card">
-                        <img src="<?php echo $item['snippet']['thumbnails']['default']['url']; ?>" alt="Thumbnail">
-                        <h3><?php echo $item['snippet']['title']; ?></h3>
-                        <p><?php echo $item['snippet']['description']; ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
     </div>
 </body>
 </html>
