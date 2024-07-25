@@ -22,31 +22,28 @@
             margin: 10px 0;
         }
     </style>
+    <script>
+        function validateForm() {
+            var name = document.forms["createUserForm"]["fullName"].value;
+            var namePattern = /^([A-Za-z]{2,}\s){3}[A-Za-z]{2,}$/;
+
+            if (!name.match(namePattern)) {
+                alert("Full name must consist of four words with only letters and at least two letters each.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <div class="form-container">
             <h2>Create User</h2>
-            <form name="createUserForm" action="create_user_action.php" method="POST" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="middleName">Middle Name:</label>
-                        <input type="text" class="form-control" id="middleName" name="middleName" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="familyName">Family Name:</label>
-                        <input type="text" class="form-control" id="familyName" name="familyName" required>
-                    </div>
+            <form name="createUserForm" action="create_user_action.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -60,7 +57,7 @@
                 </div>
                 <div class="form-group">
                     <label for="userImage">Profile Image:</label>
-                    <input type="file" class="form-control" id="userImage" name="userImage" required>
+                    <input type="file" class="form-control" id="userImage" name="userImage">
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>

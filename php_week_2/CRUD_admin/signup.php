@@ -25,48 +25,69 @@
             color: red;
         }
     </style>
+    <script>
+        function validateForm() {
+            var fullName = document.forms["signupForm"]["fullName"].value;
+            var email = document.forms["signupForm"]["email"].value;
+            var phoneNumber = document.forms["signupForm"]["phoneNumber"].value;
+            var password = document.forms["signupForm"]["password"].value;
+            var confirmPassword = document.forms["signupForm"]["confirmPassword"].value;
+
+            var namePattern = /^([A-Za-z]{2,}\s){3}[A-Za-z]{2,}$/;
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var phonePattern = /^\d{10}$/;
+            var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$/;
+
+            var errors = {};
+
+            if (!fullName.match(namePattern)) {
+                errors.fullName = "Full name must consist of four words with only letters and at least two letters each.";
+            }
+            if (!email.match(emailPattern)) {
+                errors.email = "Invalid email format.";
+            }
+            if (!phoneNumber.match(phonePattern)) {
+                errors.phoneNumber = "Phone number must be exactly 10 digits.";
+            }
+            if (!password.match(passwordPattern)) {
+                errors.password = "Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.";
+            }
+            if (password !== confirmPassword) {
+                errors.confirmPassword = "Passwords do not match.";
+            }
+
+            var errorKeys = Object.keys(errors);
+            if (errorKeys.length > 0) {
+                errorKeys.forEach(function(key) {
+                    document.getElementById(key + "Error").innerText = errors[key];
+                });
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <div class="form-container">
-            <h2>Sign up</h2>
+            <h2>Sign Up</h2>
             <p>Create an Account, It's free</p>
             <form name="signupForm" action="signup_action.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName">
-                        <span class="error" id="firstNameError"></span>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="middleName">Middle Name:</label>
-                        <input type="text" class="form-control" id="middleName" name="middleName">
-                        <span class="error" id="middleNameError"></span>
-                    </div>
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" value="<?php echo isset($_SESSION['inputs']['fullName']) ? htmlspecialchars($_SESSION['inputs']['fullName']) : ''; ?>">
+                    <span id="fullNameError" class="error"><?php echo isset($_SESSION['errors']['fullName']) ? $_SESSION['errors']['fullName'] : ''; ?></span>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName">
-                        <span class="error" id="lastNameError"></span>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="familyName">Family Name:</label>
-                        <input type="text" class="form-control" id="familyName" name="familyName">
-                        <span class="error" id="familyNameError"></span>
-                    </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?php echo isset($_SESSION['inputs']['email']) ? htmlspecialchars($_SESSION['inputs']['email']) : ''; ?>">
+                    <span id="emailError" class="error"><?php echo isset($_SESSION['errors']['email']) ? $_SESSION['errors']['email'] : ''; ?></span>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email">
-                        <span class="error" id="emailError"></span>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="phoneNumber">Phone Number:</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
-                        <span class="error" id="phoneNumberError"></span>
-                    </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="<?php echo isset($_SESSION['inputs']['phoneNumber']) ? htmlspecialchars($_SESSION['inputs']['phoneNumber']) : ''; ?>">
+                    <span id="phoneNumberError" class="error"><?php echo isset($_SESSION['errors']['phoneNumber']) ? $_SESSION['errors']['phoneNumber'] : ''; ?></span>
                 </div>
                 <div class="form-group">
                     <label for="userImage">Profile Image:</label>
@@ -75,62 +96,29 @@
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" class="form-control" id="password" name="password">
-                    <span class="error" id="passwordError"></span>
+                    <span id="passwordError" class="error"><?php echo isset($_SESSION['errors']['password']) ? $_SESSION['errors']['password'] : ''; ?></span>
                 </div>
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password:</label>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
-                    <span class="error" id="confirmPasswordError"></span>
+                    <span id="confirmPasswordError" class="error"><?php echo isset($_SESSION['errors']['confirmPassword']) ? $_SESSION['errors']['confirmPassword'] : ''; ?></span>
                 </div>
                 <button type="submit" class="btn btn-danger btn-custom">Sign Up</button>
+                <p>Already have an account? <a href="login.php">Login</a></p>
             </form>
-            <p>Already have an account? <a href="login.php">Login</a></p>
         </div>
     </div>
-    
-    <script>
-        function validateForm() {
-            let valid = true;
-
-            // Reset error messages
-            document.querySelectorAll('.error').forEach(function (el) {
-                el.textContent = '';
-            });
-
-            // Name validation
-            const namePattern = /^[A-Za-z]{2,}$/;
-            ['firstName', 'middleName', 'lastName', 'familyName'].forEach(function (field) {
-                const value = document.forms["signupForm"][field].value;
-                if (!value.match(namePattern)) {
-                    document.getElementById(field + 'Error').textContent = 'Name must be at least 2 characters long and contain no numbers.';
-                    valid = false;
-                }
-            });
-
-            // Phone number validation
-            const phonePattern = /^\d{10}$/;
-            let phoneNumber = document.forms["signupForm"]["phoneNumber"].value;
-            phoneNumber = phoneNumber.replace(/\D/g, ''); // Remove non-numeric characters
-            if (!phoneNumber.match(phonePattern)) {
-                document.getElementById('phoneNumberError').textContent = 'Phone number must be exactly 10 digits.';
-                valid = false;
-            }
-
-            // Password validation
-            const password = document.forms["signupForm"]["password"].value;
-            const confirmPassword = document.forms["signupForm"]["confirmPassword"].value;
-            const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$/;
-            if (!password.match(passwordPattern)) {
-                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.';
-                valid = false;
-            }
-            if (password !== confirmPassword) {
-                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
-                valid = false;
-            }
-
-            return valid;
-        }
-    </script>
+    <?php
+    if (isset($_SESSION['email_exists'])) {
+        echo '<script>alert("This email is already registered.");</script>';
+        unset($_SESSION['email_exists']);
+    }
+    ?>
 </body>
 </html>
+
+<?php
+// Clear errors and inputs after displaying them
+unset($_SESSION['errors']);
+unset($_SESSION['inputs']);
+?>

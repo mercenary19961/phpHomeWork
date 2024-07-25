@@ -21,15 +21,12 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
-    $firstName = $_POST['firstName'];
-    $middleName = $_POST['middleName'];
-    $lastName = $_POST['lastName'];
-    $familyName = $_POST['familyName'];
+    $fullName = $_POST['fullName'];
     $email = $_POST['email'];
     $phoneNumber = $_POST['phoneNumber'];
     $targetFile = $user['user_image'];
 
-    if ($_FILES["userImage"]["name"]) {
+    if (!empty($_FILES["userImage"]["name"])) {
         $targetDir = "uploads/";
         $targetFile = $targetDir . basename($_FILES["userImage"]["name"]);
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
@@ -42,13 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        $sql = "UPDATE users SET first_name = :firstName, middle_name = :middleName, last_name = :lastName, family_name = :familyName, email = :email, phone_number = :phoneNumber, user_image = :userImage WHERE id = :id";
+        $sql = "UPDATE users SET full_name = :fullName, email = :email, phone_number = :phoneNumber, user_image = :userImage WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
-            ':firstName' => $firstName,
-            ':middleName' => $middleName,
-            ':lastName' => $lastName,
-            ':familyName' => $familyName,
+            ':fullName' => $fullName,
             ':email' => $email,
             ':phoneNumber' => $phoneNumber,
             ':userImage' => $targetFile,
@@ -86,32 +80,29 @@ $pdo = null;
             margin: 10px 0;
         }
     </style>
+    <script>
+        function validateForm() {
+            var name = document.forms["editUserForm"]["fullName"].value;
+            var namePattern = /^([A-Za-z]{2,}\s){3}[A-Za-z]{2,}$/;
+
+            if (!name.match(namePattern)) {
+                alert("Full name must consist of four words with only letters and at least two letters each.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <div class="form-container">
             <h2>Edit User</h2>
-            <form name="editUserForm" action="edit_user.php" method="POST" enctype="multipart/form-data">
+            <form name="editUserForm" action="edit_user.php?id=<?php echo htmlspecialchars($user['id']); ?>" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($user['id']); ?>">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName" value="<?php echo htmlspecialchars($user['first_name']); ?>" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="middleName">Middle Name:</label>
-                        <input type="text" class="form-control" id="middleName" name="middleName" value="<?php echo htmlspecialchars($user['middle_name']); ?>" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo htmlspecialchars($user['last_name']); ?>" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="familyName">Family Name:</label>
-                        <input type="text" class="form-control" id="familyName" name="familyName" value="<?php echo htmlspecialchars($user['family_name']); ?>" required>
-                    </div>
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" value="<?php echo htmlspecialchars($user['full_name']); ?>" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -126,7 +117,10 @@ $pdo = null;
                 <div class="form-group">
                     <label for="userImage">Profile Image:</label>
                     <input type="file" class="form-control" id="userImage" name="userImage">
-                    <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="User Image" style="width:50px;height:50px;">
+                    <?php
+                    $userImage = $user['user_image'] ? htmlspecialchars($user['user_image']) : 'uploads/default.jpg';
+                    ?>
+                    <img src="<?php echo $userImage; ?>" alt="User Image" style="width:50px;height:50px;">
                 </div>
                 <button type="submit" class="btn btn-warning btn-custom">Update User</button>
                 <a href="admin.php" class="btn btn-secondary btn-custom">Back to Admin</a>

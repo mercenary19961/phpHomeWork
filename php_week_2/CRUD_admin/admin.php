@@ -7,7 +7,7 @@ if (!isset($_SESSION['email']) || $_SESSION['roleid'] != 1) {
 include 'config.php';
 
 try {
-    $sql = "SELECT id, first_name, middle_name, last_name, family_name, email, phone_number, user_image, date_created, roleid FROM users";
+    $sql = "SELECT id, full_name, email, phone_number, user_image, date_created, roleid FROM users";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $users = $stmt->fetchAll();
@@ -62,15 +62,16 @@ $pdo = null;
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($users as $user) { ?>
+                <?php foreach ($users as $user) { 
+                    $userImage = $user['user_image'] ? htmlspecialchars($user['user_image']) : 'uploads/default.jpg';
+                    $firstName = explode(' ', trim($user['full_name']))[0];
+                ?>
                     <tr>
                         <td><?php echo htmlspecialchars($user['id']); ?></td>
                         <td>
-                            <?php if ($user['user_image']) { ?>
-                                <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="User Image" class="user-image">
-                            <?php } ?>
+                            <img src="<?php echo $userImage; ?>" alt="User Image" class="user-image">
                         </td>
-                        <td><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name'] . ' ' . $user['family_name']); ?></td>
+                        <td><?php echo htmlspecialchars($firstName); ?></td>
                         <td><?php echo htmlspecialchars($user['email']); ?></td>
                         <td><?php echo htmlspecialchars($user['date_created']); ?></td>
                         <td><?php echo htmlspecialchars($user['phone_number']); ?></td>

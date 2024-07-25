@@ -12,7 +12,7 @@ if (!isset($_GET['id'])) {
 }
 
 try {
-    $sql = "SELECT first_name, middle_name, last_name, family_name, email, phone_number, user_image FROM users WHERE id = :id";
+    $sql = "SELECT full_name, email, phone_number, user_image FROM users WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':id' => $_GET['id']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -20,6 +20,8 @@ try {
     echo "Error: " . $e->getMessage();
 }
 $pdo = null;
+
+$userImage = $user['user_image'] ? htmlspecialchars($user['user_image']) : 'uploads/default.jpg';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,10 +50,8 @@ $pdo = null;
 </head>
 <body>
     <div class="container">
-        <h2><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name'] . ' ' . $user['family_name']); ?></h2>
-        <?php if ($user['user_image']) { ?>
-            <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="User Image" class="user-image">
-        <?php } ?>
+        <h2><?php echo htmlspecialchars($user['full_name']); ?></h2>
+        <img src="<?php echo $userImage; ?>" alt="User Image" class="user-image">
         <p>Email: <?php echo htmlspecialchars($user['email']); ?></p>
         <p>Phone Number: <?php echo htmlspecialchars($user['phone_number']); ?></p>
         <a href="admin.php" class="btn btn-primary">Back to Admin</a>

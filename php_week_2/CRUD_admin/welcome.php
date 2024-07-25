@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
 include 'config.php';
 
 try {
-    $sql = "SELECT first_name, user_image FROM users WHERE email = :email";
+    $sql = "SELECT full_name, user_image FROM users WHERE email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':email' => $_SESSION['email']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -15,6 +15,9 @@ try {
     echo "Error: " . $e->getMessage();
 }
 $pdo = null;
+
+$userImage = $user['user_image'] ? htmlspecialchars($user['user_image']) : 'uploads/default.jpg';
+$firstName = explode(' ', trim($user['full_name']))[0];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,10 +46,8 @@ $pdo = null;
 </head>
 <body>
     <div class="container">
-        <h2>Welcome, <?php echo htmlspecialchars($user['first_name']); ?>!</h2>
-        <?php if ($user['user_image']) { ?>
-            <img src="<?php echo htmlspecialchars($user['user_image']); ?>" alt="User Image" class="user-image">
-        <?php } ?>
+        <h2>Welcome, <?php echo htmlspecialchars($firstName); ?>!</h2>
+        <img src="<?php echo $userImage; ?>" alt="User Image" class="user-image">
         <p>Your email: <?php echo htmlspecialchars($_SESSION['email']); ?></p>
         <a href="logout.php" class="btn btn-primary">Logout</a>
     </div>
