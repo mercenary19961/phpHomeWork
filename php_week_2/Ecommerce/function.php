@@ -130,7 +130,7 @@ function updateCustomer($customerInput, $customerParams) {
     if (!isset($customerParams["id"])) {
         return error422('Customer id Not Found In URL');
     } elseif ($customerParams["id"] == null) {
-        return error422('Enter Your Name');
+        return error422('Enter Your name');
     }
 
     $id = mysqli_real_escape_string($conn, $customerParams['id']);
@@ -199,4 +199,5 @@ function deleteCustomer($customerParams) {
         return json_encode($data);
     }
 }
+
 ?>
